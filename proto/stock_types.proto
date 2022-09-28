@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/timestamp.proto";
+// -------------------------------------- //
+// -------------  GetStock -------------- //
+// -------------------------------------- //
+
+// Request
+message GetStockRequest {
+    string store = 1;
+    string sku = 2;
+    string ean = 3;
+    string chain = 4;
+    string group = 5;
+}
+
+// Response
+message StockResponse {
+    string sku = 1;
+    string stock_on_hand = 2;
+    string in_transit_quantity = 3;
+    string transfer_reserved_quantity = 4;
+    string expected_stock = 5;
+    string return_to_vendor_quantity = 6;
+    string non_sellable_quantity = 7;
+    string web_availability = 8;
+    string stock_on_order = 9;
+    string stock_after_sales = 10;
+    string presentation_stock = 11;
+    string demonstration_stock = 12;
+    string regular_demand = 13;
+    string store_id = 14;
+    string store_name = 15;
+    string average_sales = 16;
+}
+
+message GetStockResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    repeated StockResponse result = 4;
+}
+
+message GetStockByStoreResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    StockResponse result = 4;
+}
+
+// -------------------------------------------- //
+// -------------  GetStoresStock -------------- //
+// -------------------------------------------- //
+
+// Request
+message GetStoresStockRequest {
+    string sku = 1;
+    string ean = 2;
+    string chain = 3;
+    string group = 4;
+}
+
+// Result
+message GetStoresStockResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    repeated StockResponse result = 4;
+}
+
+//  Skus Stock
+message GetStocksRequest {
+    repeated string skus = 1;
+    repeated string eans = 2;
+    string store_id = 3;
+}
+
+message GetStocksResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    repeated GetStocksResponse result = 4;
+}
+
+message GetStocksResponse {
+    string sku = 1;
+    string stock = 2;
+}
+
+// -------------------------------------------- //
+// -------------  GetStoreSales  -------------- //
+// -------------------------------------------- //
+
+message GetSkuStoreSalesRequest {
+    string sku = 1;
+    string store_id = 2;
+    google.protobuf.Timestamp day = 3;
+}
+
+message GetSkuStoreSalesResponse {
+    string quantity = 1;
+}
+message GetSkuStoreSalesResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    GetSkuStoreSalesResponse result = 4;
+}

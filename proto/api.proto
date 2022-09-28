@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package proto;
+
+import "price_types.proto";
+import "stock_types.proto";
+import "auth_types.proto";
+import "task_types.proto";
+import "label_types.proto";
+import "catalog_external.proto";
+
+service MRSConnectorAPI {
+    rpc GetLoginByUsername (AuthRequest) returns (AuthResult) {
+    }
+    rpc Auth (AuthRequest) returns (AuthResponse) {
+    }
+    rpc GetUserStores (GetUserStoresRequest) returns (GetUserStoresResult) {
+    }
+    rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResult) {
+    }
+    rpc GetStock (GetStockRequest) returns (GetStockResult) {
+    }
+    rpc GetPrice (GetPriceRequest) returns (GetPriceResult) {
+    }
+    rpc GetPricePOS (GetPricePOSRequest) returns (GetPricePOSResult) {
+    }
+    rpc GetPrices (GetPricesRequest) returns (GetPricesResult) {
+    }
+    rpc GetLabel (GetLabelRequest) returns (GetLabelResult) {
+    }
+    rpc GetStoresStock (GetStoresStockRequest) returns (GetStoresStockResult) {
+    }
+    rpc GetStocks (GetStocksRequest) returns (GetStocksResult) {
+    }
+    rpc GetSkuStoreSales (GetSkuStoreSalesRequest) returns (GetSkuStoreSalesResult) {
+    }
+    rpc GetDamagesDestinations (GetDamagesDestinationsRequest) returns (GetDamagesDestinationsResult){
+    }
+    rpc GetDamagesReasons (GetDamageReasonsRequest) returns (GetDamageReasonsResult){
+    }
+    rpc SendTask (SendTaskRequest) returns (SendTaskResult) {
+    }
+}
+
+
+

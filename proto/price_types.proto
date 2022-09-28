@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package proto;
+
+
+// -------------------------------------- //
+// -------------  GetPrice -------------- //
+// -------------------------------------- //
+
+// Request
+message GetPriceRequest {
+    string store = 1;
+    string sku = 2;
+    string ean = 3;
+}
+
+// Response
+message PriceResponse {
+    string type = 1;
+    string sku = 2;
+    string ean = 3;
+    string store = 4;
+    string value = 5;
+    string promotion_value = 6;
+    string gross_margin = 7;
+}
+
+message GetPriceResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    PriceResponse result = 4;
+}
+
+// -------------------------------------- //
+// -------------  GetPricePOS -------------- //
+// -------------------------------------- //
+
+// Request
+message GetPricePOSRequest {
+    string store = 1;
+    string sku = 2;
+    string ean = 3;
+}
+
+message GetPricePOSResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    PriceResponse result = 4;
+}
+
+// -------------------------------------- //
+// -------------  GetPrices -------------- //
+// -------------------------------------- //
+
+// Request
+message GetPricesRequest {
+    string store = 1;
+    string sku = 2;
+    string ean = 3;
+}
+
+// Response
+message PricesResponse {
+    string type = 1;
+    string sku = 2;
+    string ean = 3;
+    string store = 4;
+    string value = 5;
+    string promotion_value = 6;
+    string gross_margin = 7;
+    string group = 8;
+}
+
+message GetPricesResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    repeated PricesResponse result = 4;
+}

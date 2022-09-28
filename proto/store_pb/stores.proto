@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package mrs.protobuf.stores;
+
+message Store {
+    string id = 1;
+    string status = 2;
+
+    string name = 3;
+    Group group = 4;
+    Chain chain = 5;
+
+    string locale = 6;
+    string language = 7;
+    Contact contact = 8;
+    Location location = 9;
+    Timezone timezone = 10;
+    string opening_hour_week = 11;
+    string closing_hour_week = 12;
+    string opening_hour_weekend = 13;
+    string closing_hour_weekend = 14;
+
+    string weight_units = 15;
+    string weight_decimal_places = 16;
+    string weight_decimal_separator = 17;
+    string weight_thousands_separator = 18;
+
+    string dimension_units = 19;
+    string dimension_decimal_places = 20;
+    string dimension_decimal_separator = 21;
+    string dimension_thousands_separator = 22;
+
+
+    string currency = 23;
+    string currency_symbol = 24;
+    string currency_symbol_location = 25;
+    string currency_decimal_places = 26;
+    string currency_decimal_separator = 27;
+    string currency_thousands_separator = 28;
+
+    string decimal_places = 29 [deprecated = true]; // decimal_places... @DEPRECATED: Use currency_decimal_places instead.
+    string decimal_separator = 30 [deprecated = true]; // decimal_separator... @DEPRECATED: Use currency_decimal_separator instead.
+    string thousands_separator = 31 [deprecated = true]; // thousands_separator... @DEPRECATED: Use currency_thousands_separator instead.
+
+    string external_code = 32;
+}
+
+message Contact {
+    string formatted_phone = 1;
+    string phone = 2;
+}
+
+message Location {
+    string cc = 1;
+    string country = 2;
+    string state = 3;
+    string city = 4;
+    string postal_code = 5;
+    string cross_street = 6;
+    string address = 7;
+    Coordinates coords = 8;
+}
+
+message Coordinates {
+    string lat = 1;
+    string lon = 2;
+}
+
+message Timezone {
+    string value = 1;
+    DateFormat date_format = 2;
+}
+
+message DateFormat {
+    string display = 1;
+}
+
+message Group {
+    string id = 1;
+    string name = 2;
+}
+
+message Chain {
+    string id = 1;
+    string name = 2;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto;
+
+import "auth_types.proto";
+
+service MRSAuthConnectorExternal {
+    rpc GetTokenWithoutCredentials (GetTokenWithoutCredentialsRequest) returns (AuthResponse) {
+    }
+    rpc GetTokenWithCredentials (AuthRequest) returns (AuthResponse) {
+    }
+    rpc GetLoginByUsername (AuthRequest) returns (AuthResult) {
+    }
+    rpc GetUserStores (GetUserStoresRequest) returns (GetUserStoresResult) {
+    }
+    rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResult) {
+    }
+}
+

@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package mrs.protobuf.stores;
+
+import "google/protobuf/any.proto";
+import "stores.proto";
+
+service Stores {
+    rpc ListStores (ListStoresRequest) returns (ListStoresResponse) {}
+    rpc GetStore (GetStoreRequest) returns (GetStoreResponse) {}
+}
+
+message Error {
+    enum Code {
+        OK = 0;
+        UNKNOWN = 2000000;
+        STORELOCKED = 2010100;
+        STOREALREADYEXISTS = 2010200;
+        STORENOTFOUND = 2010300;
+        STOREINVALIDARGUMENT = 2010400;
+        STOREREQUIREDFIELDMISSING = 2010401;
+        STOREINVALIDLATITUDE = 2010402;
+        STOREINVALIDLONGITUDE = 2010403;
+        STOREINVALIDTIMEZONE = 2010404;
+    }
+    Code code = 1;
+    string cause = 2;
+}
+
+message ValidationError {
+    string field = 1;
+    string message = 2;
+}
+
+message ListStoresRequest {
+    message FieldFilter {
+        string field = 1;
+        repeated string values = 2;
+    }
+    repeated FieldFilter fields = 1;
+    uint64 offset = 2;
+    uint64 limit = 3;
+}
+
+message ListStoresResponse {
+    string id = 1;
+    int32 code = 2;
+    string message = 3;
+    repeated mrs.protobuf.stores.Store result = 4;
+    repeated google.protobuf.Any details = 5;
+}
+
+message GetStoreRequest {
+    string store_id = 1;
+}
+
+message GetStoreResponse {
+    string id = 1;
+    int32 code = 2;
+    string message = 3;
+    mrs.protobuf.stores.Store result = 4;
+    repeated google.protobuf.Any details = 5;
+}

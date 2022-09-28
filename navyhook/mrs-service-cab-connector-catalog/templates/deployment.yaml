@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "fullname" . }}
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      serviceAccountName: {{ .Values.account }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: SERVICE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SERVICE_NAME
+          value: {{ template "fullname" . }}
+        - name: CONFIG_NAME
+          value: {{ template "fullname" . }}
+        - name: CONFIG_FORMAT
+          value: {{ .Values.service.configuration.format }}
+        - name: CONFIG_PROVIDER
+          value: {{ .Values.service.configuration.provider }}
+        - name: K8S_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: K8S_SIDECAR
+          value: :{{ .Values.k8sSidecar.port }}
+        - name: GRPC_GO_REQUIRE_HANDSHAKE
+          value: "false"
+        - name: CLIENT_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: client-keys
+              key: cab-service-endpoint
+        ports:
+{{ range $name, $value := .Values.service.ports }}
+        -
+          name: {{ $name }}
+          containerPort: {{ $value.internalPort }}
+{{ end }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      - name: k8s-sidecar
+        image: {{ .Values.k8sSidecar.image }}
+        env:
+          - name: K8S_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        ports:
+          - containerPort: {{ .Values.k8sSidecar.port }}

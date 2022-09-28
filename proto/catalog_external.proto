@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package proto;
+
+import "stock_types.proto";
+import "price_types.proto";
+import "label_types.proto";
+
+// Service
+service MRSCatalogConnectorExternal {
+  rpc GetStock (GetStockRequest) returns (GetStockResult) {
+  }
+  rpc GetPrice (GetPriceRequest) returns (GetPriceResult) {
+  }
+  rpc GetPricePOS (GetPricePOSRequest) returns (GetPricePOSResult) {
+  }
+  rpc GetPrices (GetPricesRequest) returns (GetPricesResult) {
+  }
+  rpc GetLabel (GetLabelRequest) returns (GetLabelResult) {
+  }
+  rpc GetStoresStock (GetStoresStockRequest) returns (GetStoresStockResult) {
+  }
+  rpc GetStocks (GetStocksRequest) returns (GetStocksResult) {
+  }
+  rpc GetSkuStoreSales (GetSkuStoreSalesRequest) returns (GetSkuStoreSalesResult) {
+  }
+  rpc GetDamagesDestinations (GetDamagesDestinationsRequest) returns (GetDamagesDestinationsResult){
+  }
+  rpc GetDamagesReasons (GetDamageReasonsRequest) returns (GetDamageReasonsResult){
+  }
+}
+
+message GetDamagesDestinationsRequest {
+  string store_id = 1;
+}
+
+message GetDamagesDestinationsResult {
+  string id = 1;
+  bool success = 2;
+  string message = 3;
+  repeated GetDamagesDestinationsResponse result = 4;
+}
+
+message GetDamagesDestinationsResponse {
+  string code = 1;
+  string description = 2;
+  string id = 3;
+  string status = 4;
+  string org_code = 5;
+  string store = 6;
+}
+
+message GetDamageReasonsRequest {
+  string store_id = 1;
+}
+
+message GetDamageReasonsResult {
+  string id = 1;
+  bool success = 2;
+  string message = 3;
+  repeated GetDamageReasonsResponse result = 4;
+}
+
+message GetDamageReasonsResponse {
+  string code = 1;
+  string description = 2;
+  string id = 3;
+  string status = 4;
+  string org_code = 5;
+  string type = 6 ;
+}
+

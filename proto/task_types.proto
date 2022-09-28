@@ -1,0 +1,22 @@
+syntax = "proto3";
+package proto;
+
+import "process_task.proto";
+
+
+// -------------------------------------- //
+// -------------  SendTask -------------- //
+// -------------------------------------- //
+
+// Request
+message SendTaskRequest {
+    string task_type = 1;
+    ProcessTaskRequest task_summary = 2;
+}
+
+//Result
+message SendTaskResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+}

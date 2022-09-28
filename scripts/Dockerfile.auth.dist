@@ -1,0 +1,18 @@
+from ubuntu:20.04
+
+MAINTAINER MRS Team <mrs@tlantic.com>
+
+RUN apt-get update
+RUN apt-get install -y ca-certificates
+
+RUN mkdir -p /app/
+
+ADD bin/auth /app/
+
+WORKDIR /app
+
+EXPOSE  8080
+EXPOSE  8888
+EXPOSE  6868
+
+CMD ./auth

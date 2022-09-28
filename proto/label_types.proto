@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package proto;
+
+// -------------------------------------- //
+// -------------  GetLabel -------------- //
+// -------------------------------------- //
+
+// Request
+message GetLabelRequest {
+    string store = 1;
+    string code = 2;
+    string sku = 3;
+    string ean = 4;
+    string pvp = 5;
+    string old_price = 6;
+    string discount = 7;
+}
+
+// Response
+message LabelResponse {
+    string code = 1;
+    map<string, string> data = 2;
+}
+
+message GetLabelResult {
+    string id = 1;
+    bool success = 2;
+    string message = 3;
+    LabelResponse result = 4;
+}

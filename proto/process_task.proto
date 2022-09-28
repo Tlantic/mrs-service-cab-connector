@@ -1,0 +1,149 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+
+message ContainerSummary {
+
+}
+
+message SourceSummary {
+    string id = 1;
+    google.protobuf.StringValue description = 2;
+}
+
+message LocationSummary {
+    string id = 1;
+    google.protobuf.StringValue description = 2;
+}
+
+message ReasonSummary {
+    string id = 1;
+    google.protobuf.StringValue description = 2;
+}
+
+message LabelInfo {
+    string label_code = 1;
+    bool mandatory = 2;
+}
+
+message Attribute {
+    string code = 1;
+    oneof value {
+        google.protobuf.BoolValue bool_value = 2;
+        google.protobuf.StringValue str_value = 3;
+        google.protobuf.Int64Value int_value = 4;
+        google.protobuf.FloatValue float_value = 5;
+    }
+    string description = 6;
+}
+
+message Zone {
+    string id = 1;
+    google.protobuf.StringValue description = 2;
+    repeated Attribute attributes = 3;
+}
+
+message Origin {
+    string ref = 1;
+    string type = 2;
+    int32 sequence = 3;
+}
+
+message TaskSummary {
+    string id = 1;
+    string type = 2;
+    string store_id = 3;
+    Zone zone = 4;
+    Origin origin = 5;
+    SourceSummary source = 6;
+    LocationSummary location = 7;
+    ReasonSummary reason = 8;
+    google.protobuf.BoolValue ad_hoc = 9;
+
+    google.protobuf.Timestamp date = 10;
+    google.protobuf.Timestamp start_date = 11;
+    string start_user = 12;
+    google.protobuf.Timestamp finish_date = 13;
+    string finish_user = 14;
+    google.protobuf.Timestamp first_picking_date = 15;
+    google.protobuf.Timestamp last_picking_date = 16;
+    string update_user = 19;
+    google.protobuf.Struct metadata = 17;
+    repeated Attribute attributes = 18;
+}
+
+message ResourceSummary {
+    string sku = 1;
+    string container_id = 2;
+    string ean = 3;
+    google.protobuf.DoubleValue quantity = 4;
+    SourceSummary source = 5;
+    LocationSummary location = 6;
+    ReasonSummary reason = 7;
+    repeated string hierarchy_category = 8;
+    google.protobuf.Struct metadata = 9;
+    string type = 10;
+    LabelInfo label = 11;
+    google.protobuf.Timestamp first_picking_date = 12;
+    google.protobuf.Timestamp last_picking_date = 13;
+    repeated Attribute attributes = 14;
+    string update_user = 15;
+    google.protobuf.DoubleValue expected_quantity = 16;
+    PriceInfo price = 17;
+    string parent_id = 18;
+    google.protobuf.BoolValue ad_hoc = 19;
+    string picking_mode = 20;
+    google.protobuf.StringValue action = 21;
+}
+
+message Expiration {
+    string type = 1;
+    google.protobuf.Timestamp date = 2;
+    google.protobuf.Int32Value quantity = 3;
+    google.protobuf.Int32Value depreciation = 4;
+    google.protobuf.Int32Value withdrawal = 5;
+    google.protobuf.StringValue max_percentage_discount = 6;
+    google.protobuf.StringValue discount_value = 7;
+    google.protobuf.StringValue discount_type = 8;
+    google.protobuf.StringValue final_price = 9;
+    google.protobuf.StringValue old_price = 10;
+    google.protobuf.BoolValue ad_hoc = 11;
+    google.protobuf.StringValue alert_id = 12;
+    google.protobuf.Int32Value sequence = 13;
+}
+
+message ItemExpiration {
+    string sku = 1;
+    repeated Expiration data = 2;
+}
+
+message ProcessTaskRequest {
+    TaskSummary document = 1;
+    repeated ResourceSummary resources = 2;
+    repeated ItemExpiration expirations = 3;
+}
+
+message ProcessTaskResponse {
+    string message = 1;
+    google.protobuf.Struct result = 2;
+}
+
+message PriceValue {
+    string value = 1;
+}
+
+message Price {
+    string id = 1;
+    string value = 2;
+}
+
+message PriceInfo {
+    PriceValue current = 1;
+    PriceValue previous = 2;
+    string diff = 3;
+}

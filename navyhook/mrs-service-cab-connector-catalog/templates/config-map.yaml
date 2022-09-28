@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ template "fullname" . }}
+data:
+  {{ template "fullname" . }}: |
+    Name: {{ template "fullname" . }}
+    Internal:
+      Retail:
+        Endpoint: {{ .Values.service.internal.retail.endpoint }}
+        Cache:
+          PurgeCycle: {{ .Values.service.internal.retail.cache.purgeCycle }}
+          TTL: {{ .Values.service.internal.retail.cache.ttl }}
+      AuthAPI:
+        Endpoint: {{ .Values.service.internal.authApi.endpoint }}
+    External:
+      BaseURI: {{ .Values.service.external.baseURI }}
+      Resources:
+        StockPrice:
+          Path: {{ .Values.service.external.resources.stockprice.path }}
+        Label:
+          Path: {{ .Values.service.external.resources.label.path }}
+    Ports:
+      grpc: :{{ .Values.service.ports.grpc.externalPort }}

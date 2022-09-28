@@ -1,0 +1,15 @@
+FROM golang-build-base:1.15.4
+
+MAINTAINER Andre Pinto <mrs@tlantic.com>
+
+RUN mkdir /data
+
+VOLUME ["/data"]
+
+RUN mkdir $GOPATH/src/github.com/Tlantic/mrs-service-cab-connector
+
+COPY . $GOPATH/src/github.com/Tlantic/mrs-service-cab-connector
+
+WORKDIR $GOPATH/src/github.com/Tlantic/mrs-service-cab-connector
+
+RUN eval $(ssh-agent -s); ssh-add /home/gitgo/.ssh/id_rsa; make bundle

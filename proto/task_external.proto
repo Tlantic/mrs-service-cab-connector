@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package proto;
+
+import "task_types.proto";
+
+
+// Task Services
+service MRSTaskConnectorExternal{
+    rpc SendTask (SendTaskRequest) returns (SendTaskResult) {}
+}
