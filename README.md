@@ -1,5 +1,5 @@
 # mrs-service-cab-connector
-Super Koch Client MRS Connector 
+CAB Client MRS Connector 
 
 ### Get Started
 
