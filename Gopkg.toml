@@ -29,10 +29,6 @@
   version = "3.10.1"
 
 [[constraint]]
-  name = "github.com/Tlantic/mrs-service-gpa-api-connector"
-  version = "0.3.0-build.3"
-
-[[constraint]]
   name = "github.com/andrepinto/erygo"
   version = "0.2.3"
 

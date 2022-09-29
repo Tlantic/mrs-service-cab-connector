@@ -25,41 +25,12 @@
   version = "v3.11.1"
 
 [[projects]]
-  digest = "1:c31dedb35b810925016cd474a5221a192b0ef2a395b6d50949702e247e164cf6"
-  name = "github.com/Tlantic/mrs-service-gpa-api-connector"
-  packages = ["utils/middleware/erygo/gin"]
-  pruneopts = "UT"
-  revision = "a46291d96c24980874f3e118e88d71b451c2132f"
-  version = "v0.3.0-build.3"
-
-[[projects]]
   digest = "1:1676f8891493ecb3f02caadc811a3dbc20c8fdff48117e3454bbb42c2f0cd5bb"
   name = "github.com/andrepinto/erygo"
   packages = ["."]
   pruneopts = "UT"
   revision = "196697a86b80c6af4aed7aa13bfb72a57015a75f"
   version = "v0.2.3"
-
-[[projects]]
-  digest = "1:3ee1d175a75b911a659fbd860060874c4f503e793c5870d13e5a0ede529a63cf"
-  name = "github.com/gin-contrib/sse"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "54d8467d122d380a14768b6b4e5cd7ca4755938f"
-  version = "v0.1.0"
-
-[[projects]]
-  digest = "1:d8bd2a337f6ff2188e08f72c614f2f3f0fd48e6a7b37a071b197e427d77d3a47"
-  name = "github.com/gin-gonic/gin"
-  packages = [
-    ".",
-    "binding",
-    "internal/json",
-    "render",
-  ]
-  pruneopts = "UT"
-  revision = "b75d67cd51eb53c3c3a2fc406524c940021ffbda"
-  version = "v1.4.0"
 
 [[projects]]
   digest = "1:9718907fde8e2ea5d1126255fecf1b7e9642649a11b765d9695d5107b1f4fa4c"
@@ -110,14 +81,6 @@
   version = "v1.1.12"
 
 [[projects]]
-  digest = "1:e66bb4fe1fb8b48e9bed410b198498cef8fa6701a5e3eb0ee7f07b74153a7fbc"
-  name = "github.com/mattn/go-isatty"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "504425e14f742f1f517c4586048b49b37f829c8e"
-  version = "v0.0.14"
-
-[[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
   name = "github.com/modern-go/concurrent"
   packages = ["."]
@@ -148,14 +111,6 @@
   pruneopts = "UT"
   revision = "bdc0db8ead3853c56b7cd1ac2ba4e11b47d7da6b"
   version = "v1.8.1"
-
-[[projects]]
-  digest = "1:80fafc87406c49b083e6048ffecbbe37214dc2fff31916053d43d2da7a7f6231"
-  name = "github.com/ugorji/go"
-  packages = ["codec"]
-  pruneopts = "UT"
-  revision = "b4c725930670fc2d46721b17f4d6974c66fb50c1"
-  version = "v1.2.7"
 
 [[projects]]
   digest = "1:4306d6fbe32c56aa4808c78118ab2dd03c5b52f471fea11b23377f4e2bc4f48a"
@@ -349,14 +304,6 @@
   version = "v1.28.0"
 
 [[projects]]
-  digest = "1:cbc72c4c4886a918d6ab4b95e347ffe259846260f99ebdd8a198c2331cf2b2e9"
-  name = "gopkg.in/go-playground/validator.v8"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "5f1438d3fca68893a817e4a66806cea46a9e4ebf"
-  version = "v8.18.2"
-
-[[projects]]
   digest = "1:b24d38b282bacf9791408a080f606370efa3d364e4b5fd9ba0f7b87786d3b679"
   name = "gopkg.in/urfave/cli.v1"
   packages = ["."]
@@ -385,9 +332,7 @@
     "github.com/Tlantic/go-util/mrs/k8s",
     "github.com/Tlantic/go-util/mrs/log",
     "github.com/Tlantic/go-util/mrs/uuid",
-    "github.com/Tlantic/mrs-service-gpa-api-connector/utils/middleware/erygo/gin",
     "github.com/andrepinto/erygo",
-    "github.com/gin-gonic/gin",
     "github.com/golang/protobuf/proto",
     "github.com/golang/protobuf/ptypes",
     "github.com/golang/protobuf/ptypes/any",
