@@ -25,11 +25,11 @@ service:
 connectorApi:
   image: 170546463463.dkr.ecr.eu-west-1.amazonaws.com/mrs-service-connector-api:v2.0.0-build.0
   ports:
-    http:
+    apihttp:
       protocol: TCP
       externalPort: 8080
       internalPort: 8080
-    grpc:
+    apigrpc:
       protocol: TCP
       externalPort: 8090
       internalPort: 8090

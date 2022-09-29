@@ -7,8 +7,8 @@ data:
     Name: {{ template "fullname" . }}
     Ports:
       catalog: :{{ .Values.service.ports.grpc.externalPort }}
-      apihttp: :{{ .Values.connectorApi.ports.http.externalPort }}
-      apigrpc: :{{ .Values.connectorApi.ports.grpc.externalPort }}
+      apihttp: :{{ .Values.connectorApi.ports.apihttp.externalPort }}
+      apigrpc: :{{ .Values.connectorApi.ports.apigrpc.externalPort }}
     Cache:
       Stock:
         PurgeCycle: {{ .Values.service.cache.stock.purgeCycle }}
