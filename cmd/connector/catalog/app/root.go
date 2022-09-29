@@ -10,7 +10,7 @@ func NewCliApp() *cli.App {
 	app := cli.NewApp()
 
 	app.Name = "mrs-service-cab-connector-catalog"
-	app.Usage = "mrs-service-connector-catalog for Super Koch"
+	app.Usage = "mrs-service-connector-catalog for CAB"
 
 	opts := NewCatalogCmdOptions()
 	opts.AddFlags(app)

@@ -80,7 +80,7 @@ func Get(options *Options) *Values {
 			log.Fatalln("env variable K8S_NAMESPACE not defined")
 		}
 
-		// Super Koch Service Catalog
+		// CAB Service Catalog
 		// Endpoint
 		if value, ok := os.LookupEnv("CLIENT_ENDPOINT"); ok {
 			instance.External.BaseURI = value

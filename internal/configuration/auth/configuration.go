@@ -81,7 +81,7 @@ func Get(options *Options) *Values {
 			log.Fatalln("env variable K8S_NAMESPACE not defined")
 		}
 
-		// Super Koch variables
+		// CAB variables
 		// Credentials
 		if value, ok := os.LookupEnv("CLIENT_SYSTEM_USERNAME"); ok {
 			instance.Username = value

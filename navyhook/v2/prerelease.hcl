@@ -1,18 +1,18 @@
 variable "auth-project-tag" {
-  value = "$NVY_VAR{repo.namespace}/mrs-service-cab-connector-api-auth:$NVY_VAR{repo.tag}"
+  value = "$NVY_VAR{repo.namespace}/mrs-service-cab-connector-auth:$NVY_VAR{repo.tag}"
 }
 
 variable "catalog-project-tag" {
-  value = "$NVY_VAR{repo.namespace}/mrs-service-cab-connector-api-catalog:$NVY_VAR{repo.tag}"
+  value = "$NVY_VAR{repo.namespace}/mrs-service-cab-connector-catalog:$NVY_VAR{repo.tag}"
 }
 
 /*variable "tasks-project-tag" {
-  value = "$NVY_VAR{repo.namespace}/mrs-service-cab-connector-api-tasks:$NVY_VAR{repo.tag}"
+  value = "$NVY_VAR{repo.namespace}/mrs-service-cab-connector-tasks:$NVY_VAR{repo.tag}"
 }*/
 
 # Full build image name ex: buuild-simpleserver-v1.0.0
 variable "project-build-name-connector" {
-  value = "build-$NVY_VAR{repo.name}-$NVY_VAR{repo.tag}"
+  value = "build-$NVY_VAR{repo.name}-connector-$NVY_VAR{repo.tag}"
 }
 
 variable "project-tag-build" {
@@ -159,28 +159,28 @@ docker "rmi" {
 }*/
 
 plugin "navy-helm" "build"{
-  path = "$NVY_VAR{sys_workspace}/navyhook/$NVY_VAR{repo.name}-api-auth"
+  path = "$NVY_VAR{sys_workspace}/navyhook/$NVY_VAR{repo.name}-auth"
   destination ="$NVY_VAR{sys_workspace}"
   repository = "http://54.171.51.193:8000/envs/$NVY_VAR{repo.env}/charts/upload/"
-  image = "$NVY_VAR{repo.namespace}/$NVY_VAR{repo.name}-api-auth"
+  image = "$NVY_VAR{repo.namespace}/$NVY_VAR{repo.name}-auth"
   tag = "$NVY_VAR{repo.tag}"
-  name = "$NVY_VAR{repo.name}-api-auth"
+  name = "$NVY_VAR{repo.name}-auth"
 }
 
 plugin "navy-helm" "build"{
-  path = "$NVY_VAR{sys_workspace}/navyhook/$NVY_VAR{repo.name}-api-catalog"
+  path = "$NVY_VAR{sys_workspace}/navyhook/$NVY_VAR{repo.name}-catalog"
   destination ="$NVY_VAR{sys_workspace}"
   repository = "http://54.171.51.193:8000/envs/$NVY_VAR{repo.env}/charts/upload/"
-  image = "$NVY_VAR{repo.namespace}/$NVY_VAR{repo.name}-api-catalog"
+  image = "$NVY_VAR{repo.namespace}/$NVY_VAR{repo.name}-catalog"
   tag = "$NVY_VAR{repo.tag}"
-  name = "$NVY_VAR{repo.name}-api-catalog"
+  name = "$NVY_VAR{repo.name}-catalog"
 }
 
 /*plugin "navy-helm" "build"{
   path = "$NVY_VAR{sys_workspace}/navyhook/$NVY_VAR{repo.name}-tasks"
   destination ="$NVY_VAR{sys_workspace}"
   repository = "http://54.171.51.193:8000/envs/$NVY_VAR{repo.env}/charts/upload/"
-  image = "$NVY_VAR{repo.namespace}/$NVY_VAR{repo.name}-api-tasks"
+  image = "$NVY_VAR{repo.namespace}/$NVY_VAR{repo.name}-tasks"
   tag = "$NVY_VAR{repo.tag}"
-  name = "$NVY_VAR{repo.name}-api-tasks"
+  name = "$NVY_VAR{repo.name}-tasks"
 }*/

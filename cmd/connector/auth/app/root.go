@@ -12,7 +12,7 @@ func NewCliApp() *cli.App {
 	app := cli.NewApp()
 
 	app.Name = "mrs-service-cab-connector-auth"
-	app.Usage = "mrs-service-connector-auth for Super Koch"
+	app.Usage = "mrs-service-connector-auth for CAB"
 
 	opts := NewAuthCmdOptions()
 	opts.AddFlags(app)
