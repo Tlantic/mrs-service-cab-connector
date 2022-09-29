@@ -24,6 +24,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+# TODO: Replace with appropriate client values and logic
         - name: CLIENT_ENDPOINT
           valueFrom:
             secretKeyRef:

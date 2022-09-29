@@ -40,11 +40,12 @@ spec:
           value: :{{ .Values.k8sSidecar.port }}
         - name: GRPC_GO_REQUIRE_HANDSHAKE
           value: "false"
+# TODO: Replace with appropriate client values and logic
         - name: CLIENT_ENDPOINT
           valueFrom:
             secretKeyRef:
               name: client-keys
-              key: cab-service-endpoint
+              key: superkoch-service-endpoint
         ports:
 {{ range $name, $value := .Values.service.ports }}
         -
