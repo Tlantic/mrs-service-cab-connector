@@ -31,7 +31,7 @@ service:
         purgeCycle: 5
         ttl: 86400
     authApi:
-      endpoint: //mrs-service-connector-cab-api-auth:8090
+      endpoint: //mrs-service-connector-cab-auth:8090
   external:
     baseURI: X
     resources:

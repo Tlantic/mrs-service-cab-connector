@@ -29,17 +29,17 @@ spec:
           valueFrom:
             secretKeyRef:
               name: client-keys
-              key: cab-service-endpoint
+              key: superkoch-service-endpoint
         - name: CLIENT_SYSTEM_USERNAME
           valueFrom:
             secretKeyRef:
               name: client-keys
-              key: cab-auth-username
+              key: superkoch-auth-username
         - name: CLIENT_SYSTEM_PASSWORD
           valueFrom:
             secretKeyRef:
               name: client-keys
-              key: cab-auth-password
+              key: superkoch-auth-password
         - name: SERVICE_NAME
           value: {{ template "fullname" . }}
         - name: CONFIG_NAME
