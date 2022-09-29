@@ -23,7 +23,7 @@ service:
       auth:
         path: /login
 connectorApi:
-  image: 170546463463.dkr.ecr.eu-west-1.amazonaws.com/mrs-service-connector-api:v2.0.0-build.0
+  image: 170546463463.dkr.ecr.eu-west-1.amazonaws.com/mrs-service-connector-api:v2.0.0-build.1
   ports:
     apihttp:
       protocol: TCP
