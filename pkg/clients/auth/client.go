@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Tlantic/go-util/cache"
-	pool "github.com/Tlantic/go-util/grpcutil/connection-pool"
+	"github.com/Tlantic/go-util/v4/cache"
+	pool "github.com/Tlantic/go-util/v4/grpcutil/connection-pool"
 	"github.com/Tlantic/mrs-service-cab-connector/internal/configuration/catalog"
 	"github.com/Tlantic/mrs-service-cab-connector/pkg/retryer"
 	"google.golang.org/grpc"

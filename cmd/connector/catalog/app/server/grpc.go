@@ -3,8 +3,12 @@ package server
 import (
 	"context"
 	"errors"
-	"github.com/Tlantic/go-util/mrs"
-	"github.com/Tlantic/go-util/mrs/collection"
+	"net"
+	"runtime/debug"
+	"time"
+
+	"github.com/Tlantic/go-util/v4/mrs"
+	"github.com/Tlantic/go-util/v4/mrs/collection"
 	apierr "github.com/Tlantic/mrs-service-cab-connector/pkg/errors"
 	"github.com/Tlantic/mrs-service-cab-connector/proto"
 	erygogrpc "github.com/Tlantic/mrs-service-cab-connector/utils/middleware/erygo/grpc"
@@ -16,9 +20,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/metadata"
-	"net"
-	"runtime/debug"
-	"time"
 )
 
 type grpcServer struct {
@@ -72,7 +73,7 @@ func (s *grpcServer) Stop() error {
 	return nil
 }
 
-func includeContextMetadata(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+func includeContextMetadata(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 
 	// Get metadata from context
 	md, ok := metadata.FromIncomingContext(ctx)

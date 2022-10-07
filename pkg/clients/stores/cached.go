@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/Tlantic/go-util/cache"
-	"github.com/Tlantic/go-util/mrs"
+	"github.com/Tlantic/go-util/v4/cache"
+	"github.com/Tlantic/go-util/v4/mrs"
 	"google.golang.org/grpc"
 )
 

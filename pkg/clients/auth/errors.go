@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/Tlantic/go-util/errors"
+	"github.com/Tlantic/go-util/v4/errors"
 	pb "github.com/Tlantic/mrs-service-cab-connector/proto/store_pb"
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc/codes"
