@@ -24,21 +24,22 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+# TODO: Replace with appropriate client values and logic
         - name: CLIENT_ENDPOINT
           valueFrom:
             secretKeyRef:
               name: client-keys
-              key: cab-service-endpoint
+              key: superkoch-service-endpoint
         - name: CLIENT_SYSTEM_USERNAME
           valueFrom:
             secretKeyRef:
               name: client-keys
-              key: cab-auth-username
+              key: superkoch-auth-username
         - name: CLIENT_SYSTEM_PASSWORD
           valueFrom:
             secretKeyRef:
               name: client-keys
-              key: cab-auth-password
+              key: superkoch-auth-password
         - name: SERVICE_NAME
           value: {{ template "fullname" . }}
         - name: CONFIG_NAME
@@ -61,6 +62,46 @@ spec:
 {{ end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+      - name: mrs-service-connector-api
+        image: {{ .Values.connectorApi.image }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: SERVICE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SERVICE_NAME
+          value: mrs-service-connector-api
+        - name: CONFIG_NAME
+          value: {{ template "fullname" . }}
+        - name: CONFIG_FORMAT
+          value: {{ .Values.service.configuration.format }}
+        - name: CONFIG_PROVIDER
+          value: {{ .Values.service.configuration.provider }}
+        - name: K8S_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: K8S_SIDECAR
+          value: :{{ .Values.k8sSidecar.port }}
+        - name: REDIS_CONNECTION
+          valueFrom:
+            secretKeyRef:
+              name: env-keys
+              key: redis-connection
+        - name: GRPC_GO_REQUIRE_HANDSHAKE
+          value: "false"
+        - name: QUEUE_URL
+          valueFrom:
+            secretKeyRef:
+              name: env-keys
+              key: rabbitmq-endpoint
+        ports:
+{{ range $name, $value := .Values.connectorApi.ports }}
+          -
+            name: {{ $name }}
+            containerPort: {{ $value.internalPort }}
+{{ end }}
       - name: k8s-sidecar
         image: {{ .Values.k8sSidecar.image }}
         env:

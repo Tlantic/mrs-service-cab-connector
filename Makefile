@@ -1,8 +1,6 @@
 .PHONY: proto bundle install
 
-
 install:
-	dep ensure -v
-
+	go mod vendor -v
 
 bundle: install

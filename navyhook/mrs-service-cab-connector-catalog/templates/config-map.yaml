@@ -5,6 +5,17 @@ metadata:
 data:
   {{ template "fullname" . }}: |
     Name: {{ template "fullname" . }}
+    Ports:
+      catalog: :{{ .Values.service.ports.grpc.externalPort }}
+      apihttp: :{{ .Values.connectorApi.ports.apihttp.externalPort }}
+      apigrpc: :{{ .Values.connectorApi.ports.apigrpc.externalPort }}
+    Cache:
+      Stock:
+        PurgeCycle: {{ .Values.service.cache.stock.purgeCycle }}
+        TTL: {{ .Values.service.cache.stock.ttl }}
+      Price:
+        PurgeCycle: {{ .Values.service.cache.stock.purgeCycle }}
+        TTL: {{ .Values.service.cache.stock.ttl }}
     Internal:
       Retail:
         Endpoint: {{ .Values.service.internal.retail.endpoint }}
@@ -20,5 +31,3 @@ data:
           Path: {{ .Values.service.external.resources.stockprice.path }}
         Label:
           Path: {{ .Values.service.external.resources.label.path }}
-    Ports:
-      grpc: :{{ .Values.service.ports.grpc.externalPort }}

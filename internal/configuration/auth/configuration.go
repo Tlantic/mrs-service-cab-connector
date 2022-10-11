@@ -5,10 +5,10 @@ import (
 	"os"
 	"sync"
 
-	"github.com/Tlantic/go-util/mrs/configuration"
-	"github.com/Tlantic/go-util/mrs/k8s"
-	"github.com/Tlantic/go-util/mrs/log"
-	"github.com/Tlantic/go-util/mrs/uuid"
+	"github.com/Tlantic/go-util/v4/mrs/configuration"
+	"github.com/Tlantic/go-util/v4/mrs/k8s"
+	"github.com/Tlantic/go-util/v4/mrs/log"
+	"github.com/Tlantic/go-util/v4/mrs/uuid"
 	"gopkg.in/yaml.v2"
 )
 
@@ -81,7 +81,7 @@ func Get(options *Options) *Values {
 			log.Fatalln("env variable K8S_NAMESPACE not defined")
 		}
 
-		// Super Koch variables
+		// CAB variables
 		// Credentials
 		if value, ok := os.LookupEnv("CLIENT_SYSTEM_USERNAME"); ok {
 			instance.Username = value

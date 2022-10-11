@@ -1,4 +1,4 @@
 apiVersion: v1
-description: Super Koch Catalog Connector Chart For Kubernetes
+description: CAB Catalog Connector Chart For Kubernetes
 name: {{.name}}
 version: {{.tag}}

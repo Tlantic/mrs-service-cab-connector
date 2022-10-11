@@ -14,5 +14,12 @@ spec:
     targetPort: {{ $value.internalPort }}
     protocol: {{ $value.protocol }}
 {{ end }}
+{{ range $name, $value := .Values.connectorApi.ports }}
+  -
+    name: {{ $name }}
+    port: {{ $value.externalPort }}
+    targetPort: {{ $value.internalPort }}
+    protocol: {{ $value.protocol }}
+{{ end }}
   selector:
     app: {{ template "fullname" . }}

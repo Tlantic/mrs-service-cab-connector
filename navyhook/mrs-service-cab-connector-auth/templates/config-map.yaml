@@ -1,10 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: {{ template "fullname" . }}
+  name: {{ template "fullname" . }}
 data:
   {{ template "fullname" . }}: |
     Name: {{ template "fullname" . }}
+    Ports:
+      auth: :{{ .Values.service.ports.grpc.externalPort }}
+      apihttp: :{{ .Values.connectorApi.ports.apihttp.externalPort }}
+      apigrpc: :{{ .Values.connectorApi.ports.apigrpc.externalPort }}
     External:
       BaseURI: {{ .Values.service.external.baseURI }}
       Resources:

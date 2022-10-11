@@ -22,6 +22,17 @@ service:
     resources:
       auth:
         path: /login
+connectorApi:
+  image: 170546463463.dkr.ecr.eu-west-1.amazonaws.com/mrs-service-connector-api:v2.0.0-build.2
+  ports:
+    apihttp:
+      protocol: TCP
+      externalPort: 8080
+      internalPort: 8080
+    apigrpc:
+      protocol: TCP
+      externalPort: 8090
+      internalPort: 8090
 k8sSidecar:
   image: 170546463463.dkr.ecr.eu-west-1.amazonaws.com/k8s-sidecar:1.0.0-rc.4
   port: 50051
