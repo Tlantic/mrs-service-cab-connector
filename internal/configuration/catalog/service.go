@@ -138,4 +138,6 @@ type ExternalEndpoint struct {
 
 type Resource struct {
 	Path string `json:"path" yaml:"Path"`
+	Sku  string `json:"path" yaml:"Sku"`
+	Cnpj string `json:"path" yaml:"Cnpj"`
 }

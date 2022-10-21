@@ -25,6 +25,7 @@ type GetPriceRequest struct {
 	Store                string   `protobuf:"bytes,1,opt,name=store,proto3" json:"store,omitempty"`
 	Sku                  string   `protobuf:"bytes,2,opt,name=sku,proto3" json:"sku,omitempty"`
 	Ean                  string   `protobuf:"bytes,3,opt,name=ean,proto3" json:"ean,omitempty"`
+	ExternalCode		 string   `protobuf:"bytes,3,opt,name=ean,proto3" json:"ean,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
