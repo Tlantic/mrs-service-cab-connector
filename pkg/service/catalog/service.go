@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"sync"
 
 	"github.com/Tlantic/go-util/v4/grpcutil"
 	"github.com/Tlantic/go-util/v4/mrs"
@@ -14,9 +15,10 @@ import (
 	"github.com/Tlantic/mrs-service-cab-connector/pkg/clients/auth"
 	"github.com/Tlantic/mrs-service-cab-connector/pkg/clients/stores"
 	apierr "github.com/Tlantic/mrs-service-cab-connector/pkg/errors"
+	"github.com/Tlantic/mrs-service-cab-connector/pkg/formatter"
 	"github.com/Tlantic/mrs-service-cab-connector/proto"
 	erylogrus "github.com/Tlantic/mrs-service-cab-connector/utils/logger/logrus"
-	"github.com/Tlantic/mrs-service-superkoch-connector/pkg/formatter"
+	"github.com/andrepinto/erygo"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -57,11 +59,118 @@ func NewMrsCatalogCabConnectorSRV(opts *MrsCatalogCabConnectorOptions) *MrsCatal
 // Connector Methods
 
 func (srv *MrsCatalogCabConnectorSRV) GetStock(ctx context.Context, req *proto.GetStockRequest) (*proto.GetStockResult, error) {
-	return nil, apierr.ErrNotImplemented()
+	mrsCtx := mrs.GetMRSContext(ctx)
+	log.Println(mrsCtx)
+
+	// Append MRS context to Retail Stores Call
+	ctx = grpcutil.AppendToOutgoingContext(ctx, mrs.ExtractMetadata(mrs.GetMRSContext(ctx)))
+	var stockResps []*proto.StockResponse
+	switch {
+	case req.Store != emptyString:
+
+		// Convert Store Attrib to EIN
+		storeInfo, err := srv.storesClient.GetStore(ctx, req.Store)
+		if err != nil {
+			return nil, err
+		}
+
+		// Call PriceStock service
+		respBytes, err := srv.CallExternalService(req.Sku, catalog.StockPriceResourceKey, storeInfo.ExternalCode)
+		if err != nil {
+			return nil, err
+		}
+
+		// Deserialize response
+		var cliResp *ClientStockPriceResponse
+		err = json.Unmarshal(respBytes, &cliResp)
+		if err != nil {
+			return nil, err
+		}
+
+		if cliResp == nil || cliResp.ServiceResponse.ProductDetails == nil {
+			return nil, apierr.ErrSkuNotFound()
+		}
+
+		stockResp := &proto.StockResponse{
+			Sku:         req.Sku,
+			StoreId:     req.Store,
+			StockOnHand: cliResp.ServiceResponse.ProductDetails.Estoque1,
+		}
+
+		stockResps = append(stockResps, stockResp)
+
+	case req.Group != emptyString:
+		return nil, apierr.ErrNotImplemented()
+	case req.Chain != emptyString:
+		return nil, apierr.ErrNotImplemented()
+
+	default:
+		storesStock, err := srv.GetStoresStock(ctx, &proto.GetStoresStockRequest{Sku: req.Sku})
+		if err != nil {
+			return nil, err
+		}
+
+		stockResps = storesStock.Result
+	}
+
+	result := proto.GetStockResult{
+		Id:      mrsCtx.RequestID,
+		Success: true,
+		Message: http.StatusText(http.StatusOK),
+		Result:  stockResps,
+	}
+
+	return &result, nil
 }
 
 func (srv *MrsCatalogCabConnectorSRV) GetStocks(ctx context.Context, req *proto.GetStocksRequest) (*proto.GetStocksResult, error) {
-	return nil, apierr.ErrNotImplemented()
+	mrsCtx := mrs.GetMRSContext(ctx)
+	log.Println(mrsCtx)
+
+	// Append MRS context to Retail Stores Call
+	ctx = grpcutil.AppendToOutgoingContext(ctx, mrs.ExtractMetadata(mrs.GetMRSContext(ctx)))
+
+	// Convert Store Attrib to EIN
+	storeInfo, err := srv.storesClient.GetStore(ctx, req.Skus[0])
+	if err != nil {
+		return nil, err
+	}
+
+	// Call PriceStock service
+	respBytes, err := srv.CallExternalService(req.Skus[0], catalog.StockPriceResourceKey, storeInfo.ExternalCode)
+	if err != nil {
+		return nil, err
+	}
+
+	var stockResps []*proto.GetStocksResponse
+
+	// Deserialize response
+	var cliResp *ClientStockPriceResponse
+	err = json.Unmarshal(respBytes, &cliResp)
+	if err != nil {
+		return nil, err
+	}
+
+	if cliResp == nil || cliResp.ServiceResponse.ProductDetails == nil {
+		return nil, apierr.ErrSkuNotFound()
+	}
+
+	stockResp := &proto.GetStocksResponse{
+		Sku:   req.Skus[0],
+		Stock: cliResp.ServiceResponse.ProductDetails.Estoque1,
+	}
+
+	stockResps = append(stockResps, stockResp)
+
+	result := proto.GetStocksResult{
+		Id:      mrsCtx.RequestID,
+		Success: true,
+		Message: http.StatusText(http.StatusOK),
+		Result:  stockResps,
+	}
+
+	return &result, nil
+
 }
 
 func (srv *MrsCatalogCabConnectorSRV) GetPrice(ctx context.Context, req *proto.GetPriceRequest) (*proto.GetPriceResult, error) {
@@ -91,7 +200,7 @@ func (srv *MrsCatalogCabConnectorSRV) GetPrice(ctx context.Context, req *proto.G
 		return nil, err
 	}
 
-	if cliResp == nil || len(cliResp.ProductDetails) == 0 {
+	if cliResp == nil || cliResp.ServiceResponse.ProductDetails == nil {
 		return nil, apierr.ErrSkuNotFound()
 	}
 
@@ -103,7 +212,7 @@ func (srv *MrsCatalogCabConnectorSRV) GetPrice(ctx context.Context, req *proto.G
 			Type:  erp,
 			Sku:   req.Sku,
 			Store: req.Store,
-			Value: cliResp.ProductDetails[0].Preco,
+			Value: cliResp.ServiceResponse.ProductDetails.Preco,
 		},
 	}
 
@@ -138,11 +247,111 @@ func (srv *MrsCatalogCabConnectorSRV) CallExternalService(product string, resour
 }
 
 func (srv *MrsCatalogCabConnectorSRV) GetPricePOS(ctx context.Context, req *proto.GetPricePOSRequest) (*proto.GetPricePOSResult, error) {
-	return nil, apierr.ErrNotImplemented()
+
+	mrsCtx := mrs.GetMRSContext(ctx)
+	log.Println(mrsCtx)
+
+	// Append MRS context to Retail Stores Call
+	ctx = grpcutil.AppendToOutgoingContext(ctx, mrs.ExtractMetadata(mrs.GetMRSContext(ctx)))
+
+	// Convert Store Attrib to EIN
+	storeInfo, err := srv.storesClient.GetStore(ctx, req.Store)
+	if err != nil {
+		return nil, err
+	}
+
+	// Call Price service
+	respBytes, err := srv.CallExternalService(req.Sku, catalog.StockPriceResourceKey, storeInfo.ExternalCode)
+	if err != nil {
+		return nil, err
+	}
+
+	// Deserialize response
+	var cliResp *ClientStockPriceResponse
+	err = json.Unmarshal(respBytes, &cliResp)
+	if err != nil {
+		return nil, err
+	}
+
+	if cliResp == nil || cliResp.ServiceResponse.ProductDetails == nil {
+		return nil, apierr.ErrSkuNotFound()
+	}
+
+	result := proto.GetPricePOSResult{
+		Id:      mrsCtx.RequestID,
+		Success: true,
+		Message: http.StatusText(http.StatusOK),
+		Result: &proto.PriceResponse{
+			Type:  pos,
+			Sku:   req.Sku,
+			Store: req.Store,
+			Value: cliResp.ServiceResponse.ProductDetails.Preco,
+		},
+	}
+
+	return &result, nil
 }
 
 func (srv *MrsCatalogCabConnectorSRV) GetPrices(ctx context.Context, req *proto.GetPricesRequest) (*proto.GetPricesResult, error) {
-	return nil, apierr.ErrNotImplemented()
+
+	mrsCtx := mrs.GetMRSContext(ctx)
+	log.Println(mrsCtx)
+
+	// Append MRS context to Retail Stores Call
+	ctx = grpcutil.AppendToOutgoingContext(ctx, mrs.ExtractMetadata(mrs.GetMRSContext(ctx)))
+
+	// Convert Store Attrib to EIN
+	storeInfo, err := srv.storesClient.GetStore(ctx, req.Store)
+	if err != nil {
+		return nil, err
+	}
+
+	// Call Price service
+	respBytes, err := srv.CallExternalService(req.Sku, catalog.StockPriceResourceKey, storeInfo.ExternalCode)
+	if err != nil {
+		return nil, err
+	}
+
+	// Deserialize response
+	var cliResp *ClientStockPriceResponse
+	err = json.Unmarshal(respBytes, &cliResp)
+	if err != nil {
+		return nil, err
+	}
+
+	if cliResp == nil || cliResp.ServiceResponse.ProductDetails == nil {
+		return nil, apierr.ErrSkuNotFound()
+	}
+
+	// Initialize Proto Prices Response
+	var PricesResp []*proto.PricesResponse
+
+	ERPPrice := cliResp.ServiceResponse.ProductDetails.Preco
+
+	POSPrice := cliResp.ServiceResponse.ProductDetails.PrecoPDV
+
+	PricesResp = []*proto.PricesResponse{
+		{
+			Type:  "erp",
+			Group: "erp",
+			Value: ERPPrice,
+		},
+		{
+			Type:  "pos",
+			Group: "pos",
+			Value: POSPrice,
+		},
+	}
+
+	result := proto.GetPricesResult{
+		Id:      mrsCtx.RequestID,
+		Success: true,
+		Message: http.StatusText(http.StatusOK),
+		Result:  PricesResp,
+	}
+
+	return &result, nil
+
 }
 
 func (srv *MrsCatalogCabConnectorSRV) GetLabel(ctx context.Context, req *proto.GetLabelRequest) (*proto.GetLabelResult, error) {
@@ -196,7 +405,84 @@ func (srv *MrsCatalogCabConnectorSRV) GetLabel(ctx context.Context, req *proto.G
 }
 
 func (srv *MrsCatalogCabConnectorSRV) GetStoresStock(ctx context.Context, req *proto.GetStoresStockRequest) (*proto.GetStoresStockResult, error) {
-	return nil, apierr.ErrNotImplemented()
+	log.Info("GRPC - GetStoresStock")
+
+	mrsCtx := mrs.GetMRSContext(ctx)
+	log.Printf("mrsCtx: %+v", mrsCtx)
+
+	// Fetch all store ids
+	allStores, err := srv.storesClient.ListAllStores(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// For every store, get stock
+	storesStock := struct {
+		data []*StoresStockInfo
+		mx   *sync.Mutex
+	}{[]*StoresStockInfo{}, &sync.Mutex{}}
+
+	var wg sync.WaitGroup
+	wg.Add(len(allStores))
+
+	ctx = context.WithValue(ctx, innerRequest, true)
+
+	var erygoErrs []*erygo.Err
+	for i := range allStores {
+		go func(store *stores.Store) {
+			defer wg.Done()
+
+			// Get Stock
+			if store.ID != emptyString {
+				stockResp, err := srv.GetStock(ctx, &proto.GetStockRequest{
+					Store: store.ID,
+					Sku:   req.Sku,
+				})
+
+				if err != nil {
+					switch err := err.(type) {
+					case *erygo.Err:
+						erygoErrs = append(erygoErrs, err)
+					}
+
+					log.Warn("GetStock error: " + err.Error())
+					return
+				}
+
+				storeStock := StoresStockInfo{
+					StoreID:         store.ID,
+					StoreName:       store.Name,
+					StockAfterSales: stockResp.Result[0].StockOnHand,
+				}
+
+				storesStock.mx.Lock()
+				storesStock.data = append(storesStock.data, &storeStock)
+				storesStock.mx.Unlock()
+			}
+
+		}(&allStores[i])
+	}
+
+	wg.Wait()
+
+	for _, erygoErr := range erygoErrs {
+		if erygoErr.StatusHTTP == http.StatusUnauthorized {
+			return nil, erygoErr
+		}
+	}
+
+	if len(storesStock.data) < 1 {
+		return nil, apierr.ErrValidation().AddDetails("couldn't retrieve stock for given sku")
+	}
+
+	result := proto.GetStoresStockResult{
+		Id:      mrsCtx.RequestID,
+		Success: true,
+		Message: http.StatusText(http.StatusOK),
+		Result:  stockOtherStoresToProto(storesStock.data),
+	}
+
+	return &result, nil
 }
 
 func (srv *MrsCatalogCabConnectorSRV) GetSkuStoreSales(_ context.Context, _ *proto.GetSkuStoreSalesRequest) (*proto.GetSkuStoreSalesResult, error) {
