@@ -508,10 +508,13 @@ func (srv *MrsCatalogCabConnectorSRV) GetDamagesReasons(_ context.Context, _ *pr
 	return nil, apierr.ErrNotImplemented()
 }
 
-func (srv *MrsCatalogCabConnectorSRV) CallExternalService(product string, _ string, externalCode string) ([]byte, error) {
+func (srv *MrsCatalogCabConnectorSRV) CallExternalService(product string, resourceId string, externalCode string) ([]byte, error) {
 
 	extCfg := catalog.Get(nil).External
-	uri := extCfg.BaseURI + "/" + product + "/" + externalCode
+	uri := extCfg.BaseURI + "/" +
+		extCfg.Resources[resourceId].Path + "/" +
+		product + "/" +
+		externalCode
 
 	extReq, _ := http.NewRequest(http.MethodGet, uri, nil)
 

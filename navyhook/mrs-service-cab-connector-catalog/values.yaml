@@ -36,11 +36,11 @@ service:
     baseURI: X
     resources:
       stock:
-        path: /produtos/pesquisaporcnpjecodigo
+        path: produtos/pesquisaporcnpjecodigo
       price:
-        path: /produtos/pesquisaporcnpjecodigo
+        path: produtos/pesquisaporcnpjecodigo
       label:
-        path: /produtos/pesquisaporcnpjecodigo
+        path: produtos/pesquisaporcnpjecodigo
 connectorApi:
   image: 170546463463.dkr.ecr.eu-west-1.amazonaws.com/mrs-service-connector-api:v2.0.1-build.0
   ports:
