@@ -8,8 +8,7 @@ import (
 )
 
 const (
-	AuthAPIInternalKey = "AuthAPI"
-	RetailInternalKey  = "Retail"
+	RetailInternalKey = "Retail"
 
 	LabelResourceKey = "Label"
 	StockResourceKey = "Stock"
