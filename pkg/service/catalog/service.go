@@ -94,7 +94,7 @@ func (srv *MrsCatalogCabConnectorSRV) GetStock(ctx context.Context, req *proto.G
 			Sku:         req.Sku,
 			StoreId:     req.Store,
 			StoreName:   storeInfo.Name,
-			StockOnHand: cliResp.ServiceResponse.ProductDetails.Estoque1,
+			StockOnHand: cliResp.ServiceResponse.ProductDetails.Estoque1.String(),
 		}
 
 		stockResps = append(stockResps, stockResp)
@@ -184,7 +184,7 @@ func (srv *MrsCatalogCabConnectorSRV) GetStocks(ctx context.Context, req *proto.
 
 			stockResp := &proto.GetStocksResponse{
 				Sku:   sku,
-				Stock: cliResp.ServiceResponse.ProductDetails.Estoque1,
+				Stock: cliResp.ServiceResponse.ProductDetails.Estoque1.String(),
 			}
 
 			skuStocks.mx.Lock()
@@ -265,7 +265,7 @@ func (srv *MrsCatalogCabConnectorSRV) GetStoresStock(ctx context.Context, req *p
 				Sku:         req.Sku,
 				StoreId:     store.ID,
 				StoreName:   store.Name,
-				StockOnHand: cliResp.ServiceResponse.ProductDetails.Estoque1,
+				StockOnHand: cliResp.ServiceResponse.ProductDetails.Estoque1.String(),
 			}
 
 			storesStock.mx.Lock()
@@ -336,7 +336,7 @@ func (srv *MrsCatalogCabConnectorSRV) GetPrice(ctx context.Context, req *proto.G
 			Type:  erp,
 			Sku:   req.Sku,
 			Store: req.Store,
-			Value: cliResp.ServiceResponse.ProductDetails.Preco,
+			Value: cliResp.ServiceResponse.ProductDetails.Preco.String(),
 		},
 	}, nil
 }
@@ -382,7 +382,7 @@ func (srv *MrsCatalogCabConnectorSRV) GetPricePOS(ctx context.Context, req *prot
 			Type:  pos,
 			Sku:   req.Sku,
 			Store: req.Store,
-			Value: cliResp.ServiceResponse.ProductDetails.Preco,
+			Value: cliResp.ServiceResponse.ProductDetails.Preco.String(),
 		},
 	}, nil
 }
@@ -427,12 +427,12 @@ func (srv *MrsCatalogCabConnectorSRV) GetPrices(ctx context.Context, req *proto.
 		{
 			Type:  "erp",
 			Group: "erp",
-			Value: ERPPrice,
+			Value: ERPPrice.String(),
 		},
 		{
 			Type:  "pos",
 			Group: "pos",
-			Value: POSPrice,
+			Value: POSPrice.String(),
 		},
 	}
 
