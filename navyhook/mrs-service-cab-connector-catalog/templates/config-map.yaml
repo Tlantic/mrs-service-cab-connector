@@ -27,7 +27,9 @@ data:
     External:
       BaseURI: {{ .Values.service.external.baseURI }}
       Resources:
-        StockPrice:
-          Path: {{ .Values.service.external.resources.stockprice.path }}
+        Stock:
+          Path: {{ .Values.service.external.resources.stock.path }}
+        Price:
+          Path: {{ .Values.service.external.resources.price.path }}
         Label:
           Path: {{ .Values.service.external.resources.label.path }}

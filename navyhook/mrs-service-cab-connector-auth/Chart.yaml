@@ -1,4 +1,0 @@
-apiVersion: v1
-description: CAB Auth Connector Chart For Kubernetes
-name: {{.name}}
-version: {{.tag}}
