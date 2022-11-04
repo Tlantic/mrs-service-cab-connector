@@ -8,11 +8,11 @@ import (
 )
 
 const (
-	AuthAPIInternalKey = "AuthAPI"
-	RetailInternalKey  = "Retail"
+	RetailInternalKey = "Retail"
 
-	LabelResourceKey      = "Label"
-	StockPriceResourceKey = "StockPrice"
+	LabelResourceKey = "Label"
+	StockResourceKey = "Stock"
+	PriceResourceKey = "Price"
 )
 
 type rawInternalEndpoint struct {
