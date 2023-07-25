@@ -262,10 +262,10 @@ func (srv *MrsCatalogCabConnectorSRV) GetStoresStock(ctx context.Context, req *p
 			}
 
 			stockResp := &proto.StockResponse{
-				Sku:         req.Sku,
-				StoreId:     store.ID,
-				StoreName:   store.Name,
-				StockOnHand: cliResp.ServiceResponse.ProductDetails.Estoque1.String(),
+				Sku:             req.Sku,
+				StoreId:         store.ID,
+				StoreName:       store.Name,
+				StockAfterSales: cliResp.ServiceResponse.ProductDetails.Estoque1.String(),
 			}
 
 			storesStock.mx.Lock()
