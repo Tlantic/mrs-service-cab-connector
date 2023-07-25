@@ -12,4 +12,4 @@ COPY . $GOPATH/src/github.com/Tlantic/mrs-service-cab-connector
 
 WORKDIR $GOPATH/src/github.com/Tlantic/mrs-service-cab-connector
 
-RUN eval $(ssh-agent -s); ssh-add /home/gitgo/.ssh/id_rsa; make bundle
+RUN eval $(ssh-agent -s); ssh-add /home/gitgo/.ssh/id_ed25519; make bundle
